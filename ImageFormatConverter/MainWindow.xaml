@@ -41,13 +41,13 @@
                     Width="144"
                     Command="{Binding OnImportButton}"
                     />
-            <Button Content="Convert and Save Images" 
+            <Button Content="Export images" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
                     Margin="0 96 0 0"
                     Height="48" 
                     Width="144" 
-                    Command="{Binding OnConvertButton}"
+                    Command="{Binding OnExportButton}"
                     />
             <Button Content="Remove Selected Image" 
                     HorizontalAlignment="Center" 
@@ -67,7 +67,7 @@
                       VerticalAlignment="Top" 
                       Width="144" 
                       IsReadOnly="True"
-                      SelectedIndex="{Binding SetFormatIndex}"
+                      SelectedIndex="{Binding FormatIndex}"
                       ItemsSource="{Binding GetFormatsFromModel}"
                       />
             <CheckBox Content="Create Directory" 
@@ -75,7 +75,7 @@
                       Margin="0,292,0,0" 
                       VerticalAlignment="Top" 
                       Width="144"
-                      IsChecked="True"
+                      IsChecked="{Binding IsCreateNewFolder}"
                       />
 
         </Grid>
