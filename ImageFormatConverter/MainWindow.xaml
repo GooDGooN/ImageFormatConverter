@@ -5,23 +5,76 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:local="clr-namespace:ImageFormatConverter"
         xmlns:viewModel="clr-namespace:ImageFormatConverter.ViewModel"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid  >
-        <TextBlock HorizontalAlignment="Center" Height="23" Margin="0,94,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="425" Background="#FFF0F0F0" />
-        <TextBlock TextWrapping="Wrap" 
-           Text="hello" 
-           Margin="0,0,0,0" 
-           Background="#FFD2F0FF" 
-           FontSize="16" 
-           FontWeight="Bold" 
-           HorizontalAlignment="Center" 
-           VerticalAlignment="Center" 
-           Width="300" 
-           Height="150"
-           AllowDrop="True"                   
-           viewModel:DropFolderBehavior.DropFolder="{Binding DropFolderCommand}"
-           />
+        xmlns:model="clr-namespace:ImageFormatConverter.Model"
+        Title="MainWindow" Height="480" Width="640">
+    <Grid >
+        <ListBox Width="360" 
+                 Height="360" 
+                 Background="#FFFAFAFA" 
+                 HorizontalAlignment="Left" 
+                 VerticalAlignment="Center" 
+                 Margin="32 0 0 0"
+                 SelectionMode="Extended"
+                 AllowDrop="True"
+                 viewModel:DropFolderBehavior.DropFolder="{Binding DropFolderCommand}" 
+                 ItemsSource="{Binding GetItemsFromModel}"
 
+               >
+        </ListBox>
+        <Grid Width="200"
+              Height="360" 
+              HorizontalAlignment="Right" 
+              VerticalAlignment="Center" 
+              Margin="0 0 32 0" 
+              >
+            <Rectangle 
+                Width="192"
+                Height="360" 
+                Stroke="#FFAFAFAF" 
+         
+                />
+            <Button Content="Import" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    Margin="0 32 0 0"
+                    Height="48" 
+                    Width="144"
+                    Command="{Binding OnImportButton}"
+                    />
+            <Button Content="Convert and Save Images" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    Margin="0 96 0 0"
+                    Height="48" 
+                    Width="144" 
+                    />
+            <Button Content="Remove Selected Image" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    Margin="0 160 0 0"
+                    Height="48" 
+                    Width="144"
+                    />
+            <TextBlock HorizontalAlignment="Center" 
+                       VerticalAlignment="Top"
+                       Margin="0 224 0 0" 
+                       TextWrapping="Wrap" 
+                       Text="Convert Target" 
+                       />
+            <ComboBox HorizontalAlignment="Center" 
+                      Margin="0 252 0 0" 
+                      VerticalAlignment="Top" 
+                      Width="144"
+                      
+                      />
+            <CheckBox Content="Create Directory" 
+                      HorizontalAlignment="Center" 
+                      Margin="0,292,0,0" 
+                      VerticalAlignment="Top" 
+                      Width="144"
+                      IsChecked="True"
+                      />
 
+        </Grid>
     </Grid>
 </Window>

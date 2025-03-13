@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ImageFormatConverter"
              xmlns:viewModel="clr-namespace:ImageFormatConverter.ViewModel"
+             xmlns:model="clr-namespace:ImageFormatConverter.Model"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
