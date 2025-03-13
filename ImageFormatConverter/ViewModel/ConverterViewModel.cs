@@ -26,9 +26,14 @@ public class ConverterViewModel
     public ICommand OnImportButton => new RelayCommand(FolderImport);
     public ICommand OnConvertButton => new RelayCommand(ImagesConvert);
 
-    public ObservableCollection<string> GetItemsFromModel
+
+    public ObservableCollection<string> GetItemsFromModel => model.ListItems;
+    public ObservableCollection<string> GetFormatsFromModel => model.FormatItems;
+
+    public int SetFormatIndex
     {
-        get => model.ListItems;
+        get => model.TargetFormatIndex;
+        set => model.TargetFormatIndex = value;
     }
 
     public ConverterViewModel()
@@ -76,7 +81,7 @@ public class ConverterViewModel
         
     }
 
-    public bool IsImageFormat(string filePath)
+    private bool IsImageFormat(string filePath)
     {
         try
         {

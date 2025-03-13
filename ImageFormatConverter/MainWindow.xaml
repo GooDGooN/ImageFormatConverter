@@ -47,6 +47,7 @@
                     Margin="0 96 0 0"
                     Height="48" 
                     Width="144" 
+                    Command="{Binding OnConvertButton}"
                     />
             <Button Content="Remove Selected Image" 
                     HorizontalAlignment="Center" 
@@ -64,8 +65,10 @@
             <ComboBox HorizontalAlignment="Center" 
                       Margin="0 252 0 0" 
                       VerticalAlignment="Top" 
-                      Width="144"
-                      
+                      Width="144" 
+                      IsReadOnly="True"
+                      SelectedIndex="{Binding SetFormatIndex}"
+                      ItemsSource="{Binding GetFormatsFromModel}"
                       />
             <CheckBox Content="Create Directory" 
                       HorizontalAlignment="Center" 

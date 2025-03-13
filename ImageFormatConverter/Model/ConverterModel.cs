@@ -11,6 +11,9 @@ public class ConverterModel
     public List<string> ImportedImageFiles = new();
     public string? SaveDirection;
     public ObservableCollection<string> ListItems = new();
+    public ObservableCollection<string> FormatItems = ["PNG", "GIF", "JPEG", "BMP"];
+    public int TargetFormatIndex;
+
 
     public ConverterModel()
     {
