@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ImageFormatConverter"
         xmlns:viewModel="clr-namespace:ImageFormatConverter.ViewModel"
         xmlns:model="clr-namespace:ImageFormatConverter.Model"
-        Title="MainWindow" Height="480" Width="640">
+        Title="Image Format Converter" Height="480" Width="640" ResizeMode="NoResize">
     <Grid >
         <ListBox Width="360" 
                  Height="360" 
@@ -16,10 +16,11 @@
                  Margin="32 0 0 0"
                  SelectionMode="Extended"
                  AllowDrop="True"
-                 viewModel:DropFolderBehavior.DropFolder="{Binding DropFolderCommand}" 
+                 viewModel:DropFolderBehavior.DropFolder="{Binding DropImageCommand}" 
                  ItemsSource="{Binding GetItemsFromModel}"
-
-               >
+                 viewModel:ListboxSelectedItemsBehavior.SelectItems="{Binding GetSelectedItems}"
+                >
+            
         </ListBox>
         <Grid Width="200"
               Height="360" 
@@ -33,28 +34,37 @@
                 Stroke="#FFAFAFAF" 
          
                 />
-            <Button Content="Import" 
+            <Button Content="Import folder" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
                     Margin="0 32 0 0"
-                    Height="48" 
+                    Height="32" 
                     Width="144"
-                    Command="{Binding OnImportButton}"
+                    Command="{Binding OnImportFolderButton}"
+                    />
+            <Button Content="Import file" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    Margin="0 80 0 0"
+                    Height="32" 
+                    Width="144"
+                    Command="{Binding OnImportFileButton}"
                     />
             <Button Content="Export images" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
-                    Margin="0 96 0 0"
-                    Height="48" 
+                    Margin="0 128 0 0"
+                    Height="32" 
                     Width="144" 
                     Command="{Binding OnExportButton}"
                     />
             <Button Content="Remove Selected Image" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
-                    Margin="0 160 0 0"
-                    Height="48" 
+                    Margin="0 172 0 0"
+                    Height="32" 
                     Width="144"
+                    Command="{Binding OnRemoveButton}"
                     />
             <TextBlock HorizontalAlignment="Center" 
                        VerticalAlignment="Top"

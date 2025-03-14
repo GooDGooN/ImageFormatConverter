@@ -10,7 +10,7 @@ namespace ImageFormatConverter.ViewModel;
 public class RelayCommand<T> : ICommand
 {
     public event EventHandler? CanExecuteChanged;
-    private Action<T>? targetExecute;
+    private Action<T> targetExecute;
 
     public RelayCommand(Action<T> targetExcute)
     {
@@ -34,7 +34,7 @@ public class RelayCommand<T> : ICommand
 public class RelayCommand : ICommand
 {
     public event EventHandler? CanExecuteChanged;
-    private Action? targetExecute;
+    private Action targetExecute;
 
     public RelayCommand(Action targetExcute)
     {

@@ -22,6 +22,7 @@ public class ConverterModel
     public string? SaveDirection;
     public ObservableCollection<string> ListItems = new();
     public ObservableCollection<string> FormatItems = ["PNG", "GIF", "JPEG", "BMP", "WEBP", "ICON"];
+    public ObservableCollection<string> SelectedItem = new();
     public int TargetFormatIndex;
     public bool IsCreateNewFolder = true;
 
@@ -35,6 +36,6 @@ public class ConverterModel
     public void ResetField()
     {
         SaveDirection = "";
-        ImportedImageFiles.Clear();
+        //ImportedImageFiles.Clear();
     }
 }

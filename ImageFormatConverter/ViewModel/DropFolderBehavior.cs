@@ -15,22 +15,22 @@ public static class DropFolderBehavior
             "DropFolder",
             typeof(ICommand),
             typeof(DropFolderBehavior),
-            new PropertyMetadata(null, PropertyMetadataChanged)
+            new PropertyMetadata(null, PropertyChanged)
             );
 
     
-    public static void SetDropFolder(DependencyObject obj, ICommand value) 
+    public static void SetDropFolder(DependencyObject dpo, ICommand value) 
     {
-        obj.SetValue(DragDropProperty, value);
+        dpo.SetValue(DragDropProperty, value);
     }
-    public static ICommand GetDropFolder(DependencyObject obj)
+    public static ICommand GetDropFolder(DependencyObject dpo)
     {
-        return (ICommand)obj.GetValue(DragDropProperty); 
+        return (ICommand)dpo.GetValue(DragDropProperty); 
     }
 
-    private static void PropertyMetadataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void PropertyChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e)
     {
-        if (d is UIElement uiControl)
+        if (dpo is UIElement uiControl)
         {
             if (e.OldValue != null)
             {

@@ -11,26 +11,31 @@ using ImageFormatConverter.Model;
 using System.Drawing;
 using Microsoft.Win32;
 using System.Drawing.Imaging;
+using System.ComponentModel;
 
 
 namespace ImageFormatConverter.ViewModel;
 public class ConverterViewModel
 {
     private ConverterModel model;
-    private ICommand dropFolderCommand;
-    public ICommand DropFolderCommand
+    private ICommand dropImageCommand;
+    public ICommand DropImageCommand
     {
-        get => dropFolderCommand;
-        set => dropFolderCommand.Execute(value);
+        get => dropImageCommand;
+        set => dropImageCommand.Execute(value);
     }
 
-    public ICommand OnImportButton => new RelayCommand(FolderImport);
+    public ICommand OnImportFolderButton => new RelayCommand(FolderImport);
+    public ICommand OnImportFileButton => new RelayCommand(FileImport);
     public ICommand OnExportButton => new RelayCommand(ExportImages);
+    public ICommand OnRemoveButton => new RelayCommand(RemoveSelected);
 
 
     public ObservableCollection<string> GetItemsFromModel => model.ListItems;
     public ObservableCollection<string> GetFormatsFromModel => model.FormatItems;
+    public ObservableCollection<string> GetSelectedItems => model.SelectedItem;
 
+    
     public int FormatIndex
     {
         get => model.TargetFormatIndex;
@@ -45,32 +50,46 @@ public class ConverterViewModel
 
     public ConverterViewModel()
     {
-        dropFolderCommand = new RelayCommand<DragEventArgs>(AddFolderCommand);
+        dropImageCommand = new RelayCommand<DragEventArgs>(DropImage);
         model = new();
     }
 
-    public void AddFolderCommand(DragEventArgs e)
+    public void DropImage(DragEventArgs e)
     {
         var droptedItems = e.Data.GetData(DataFormats.FileDrop) as string[];
         model.ResetField();
 
-        if (droptedItems?.Length == 1)
+        if (droptedItems != null)
         {
-            TryImportImages(droptedItems[0]);
+            TryImportImages(droptedItems);
         }
     }
 
-    private void TryImportImages(string dir)
+    private void TryImportImages(params string[] dirs)
     {
-        if (Directory.Exists(dir))
+        if(dirs.Length > 0)
         {
-            var directoryInfo = new DirectoryInfo(dir);
-            foreach (var info in directoryInfo.GetFiles())
+            if (Directory.Exists(dirs[0]))
             {
-                if (IsImageFormat(info.FullName))
+                var directoryInfo = new DirectoryInfo(dirs[0]);
+                foreach (var info in directoryInfo.GetFiles())
                 {
-                    model.ImportedImageFiles.Add(info.FullName);
-                    model.ListItems.Add(info.FullName);
+                    if (IsImageFormat(info.FullName))
+                    {
+                        //model.ImportedImageFiles.Add(info.FullName);
+                        model.ListItems.Add(info.FullName);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var dir in dirs)
+                {
+                    if (IsImageFormat(dir))
+                    {
+                        //model.ImportedImageFiles.Add(dir);
+                        model.ListItems.Add(dir);
+                    }
                 }
             }
         }
@@ -82,6 +101,16 @@ public class ConverterViewModel
         dialog.Title = "Select import target folder";
         dialog.ShowDialog();
         TryImportImages(dialog.FolderName);
+    }
+
+    private void FileImport()
+    {
+        var dialog = new OpenFileDialog();
+        dialog.Title = "Select import target ImageFiles";
+        dialog.Multiselect = true;
+        dialog.Filter = "Image Files (*.png, *.gif, *.jpeg, *.bmp, *.webp, *.ico | *.png; *.gif; *.jpeg; *.bmp; *.webp; *.ico | All files (*.*) | *.*";
+        dialog.ShowDialog();
+        TryImportImages(dialog.FileNames);
     }
     private void ExportImages()
     {
@@ -141,8 +170,14 @@ public class ConverterViewModel
                         }
                     }
                     var fileName = dir + file.Substring(strLeftIndex + 1, strRightIndex - strLeftIndex - 1) + formatStr;
-                    MessageBox.Show(fileName);
-                    Image.FromFile(file).Save(fileName, format);
+                    try
+                    {
+                        Image.FromFile(file).Save(fileName, format);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("ERROR:There is no file!\ndid you delete it while converting?");
+                    }
                 }
 
                 MessageBox.Show($"saved at {dir}");
@@ -154,6 +189,13 @@ public class ConverterViewModel
         }
     }
 
+    private void RemoveSelected() 
+    {
+        while(GetSelectedItems.Count > 0)
+        {
+            model.ListItems.Remove(GetSelectedItems.First());
+        }
+    }
     private bool IsImageFormat(string filePath)
     {
         try
