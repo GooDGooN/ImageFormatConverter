@@ -76,7 +76,6 @@ public class ConverterViewModel
                 {
                     if (IsImageFormat(info.FullName))
                     {
-                        //model.ImportedImageFiles.Add(info.FullName);
                         model.ListItems.Add(info.FullName);
                     }
                 }
@@ -87,7 +86,6 @@ public class ConverterViewModel
                 {
                     if (IsImageFormat(dir))
                     {
-                        //model.ImportedImageFiles.Add(dir);
                         model.ListItems.Add(dir);
                     }
                 }

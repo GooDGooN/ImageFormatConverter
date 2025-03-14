@@ -18,7 +18,6 @@ public enum TargetImageFormat
 }
 public class ConverterModel
 {
-    public List<string> ImportedImageFiles = new();
     public string? SaveDirection;
     public ObservableCollection<string> ListItems = new();
     public ObservableCollection<string> FormatItems = ["PNG", "GIF", "JPEG", "BMP", "WEBP", "ICON"];
@@ -36,6 +35,5 @@ public class ConverterModel
     public void ResetField()
     {
         SaveDirection = "";
-        //ImportedImageFiles.Clear();
     }
 }
