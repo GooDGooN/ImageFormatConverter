@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageFormatConverter.Model;
 
@@ -18,22 +15,10 @@ public enum TargetImageFormat
 }
 public class ConverterModel
 {
-    public string? SaveDirection;
+    public string SaveDirection = "";
     public ObservableCollection<string> ListItems = new();
     public ObservableCollection<string> FormatItems = ["PNG", "GIF", "JPEG", "BMP", "WEBP", "ICON"];
     public ObservableCollection<string> SelectedItem = new();
     public int TargetFormatIndex;
     public bool IsCreateNewFolder = true;
-
-
-    public ConverterModel()
-    {
-        ResetField();
-
-    }
-
-    public void ResetField()
-    {
-        SaveDirection = "";
-    }
 }
