@@ -9,13 +9,6 @@ using System.Windows;
 
 namespace ImageFormatConverter.Utility;
 
-public enum DialogType
-{
-    ImportFiles,
-    ImportFolder,
-    Export,
-}
-
 public class ImageManager
 {
     private static ImageFormat[] formats = [
