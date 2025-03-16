@@ -18,7 +18,7 @@
                  AllowDrop="True"
                  viewModel:DropFolderBehavior.DropFolder="{Binding DropImageCommand}" 
                  ItemsSource="{Binding GetItemsFromModel}"
-                 viewModel:ListboxSelectedItemsBehavior.SelectItems="{Binding GetSelectedItems}"
+                 viewModel:ListboxSelectedItemsBehavior.SelectItems="{Binding GetCurrentSelectedItems}"
                 >
             
         </ListBox>

@@ -28,14 +28,12 @@ public class ConverterViewModel
     public ICommand OnImportFolderButton => new RelayCommand(FolderImport);
     public ICommand OnImportFileButton => new RelayCommand(FileImport);
     public ICommand OnExportButton => new RelayCommand(ExportImages);
-    public ICommand OnRemoveButton => new RelayCommand(RemoveSelected);
-
+    public ICommand OnRemoveButton => new RelayCommand(RemoveSelectedInList);
 
     public ObservableCollection<string> GetItemsFromModel => model.ListItems;
     public ObservableCollection<string> GetFormatsFromModel => model.FormatItems;
-    public ObservableCollection<string> GetSelectedItems => model.SelectedItem;
+    public ObservableCollection<string> GetCurrentSelectedItems => model.SelectedItem;
 
-    
     public int FormatIndex
     {
         get => model.TargetFormatIndex;
@@ -106,7 +104,7 @@ public class ConverterViewModel
         var dialog = new OpenFileDialog();
         dialog.Title = "Select import target ImageFiles";
         dialog.Multiselect = true;
-        dialog.Filter = "Image Files (*.png, *.gif, *.jpeg, *.bmp, *.webp, *.ico | *.png; *.gif; *.jpeg; *.bmp; *.webp; *.ico | All files (*.*) | *.*";
+        dialog.Filter = "Image Files (*.png, *.gif, *.jpeg, *.bmp, *.webp, *.ico|*.png;*.gif;*.jpeg;*.bmp;*.webp;*.ico|All files (*.*)|*.*";
         dialog.ShowDialog();
         TryImportImages(dialog.FileNames);
     }
@@ -117,69 +115,41 @@ public class ConverterViewModel
             var dialog = new OpenFolderDialog();
             dialog.Title = "Select export location";
             dialog.ShowDialog();
-            if(dialog.FolderName != "")
+
+            var dir = dialog.FolderName;
+            if (!Directory.Exists(dir))
             {
-                var dir = dialog.FolderName;
-                if (IsCreateNewFolder)
+                if(dir == "")
                 {
-                    dir += @"\ImageFormatConvert";
-                    Directory.CreateDirectory(dir);
+                    return;
                 }
-
-                foreach(var file in GetItemsFromModel)
-                {
-                    var format = ImageFormat.Png;
-                    var formatStr = ".png";
-                    var targetEnum = (TargetImageFormat)FormatIndex;
-                    switch (targetEnum)
-                    {
-                        case TargetImageFormat.gif:
-                            format = ImageFormat.Gif;
-                            formatStr = ".gif";
-                            break;
-                        case TargetImageFormat.jpeg: 
-                            format = ImageFormat.Jpeg;
-                            formatStr = ".jpeg";
-                            break;
-                        case TargetImageFormat.bmp: 
-                            format = ImageFormat.Bmp;
-                            formatStr = ".bmp";
-                            break;
-                        case TargetImageFormat.webp: 
-                            format = ImageFormat.Webp;
-                            formatStr = ".webp";
-                            break;
-                        case TargetImageFormat.icon: 
-                            format = ImageFormat.Icon;
-                            formatStr = ".icon";
-                            break;
-                    }
-                    var strLeftIndex = file.Length - 1;
-                    var strRightIndex = file.Length - 1;
-                    while (true)
-                    {
-                        if (file[strLeftIndex--] == 92)
-                        {
-                            break;
-                        }
-                        if (file[strRightIndex] != 46)
-                        {
-                            strRightIndex--;
-                        }
-                    }
-                    var fileName = dir + file.Substring(strLeftIndex + 1, strRightIndex - strLeftIndex - 1) + formatStr;
-                    try
-                    {
-                        Image.FromFile(file).Save(fileName, format);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("ERROR:There is no file!\ndid you delete it while converting?");
-                    }
-                }
-
-                MessageBox.Show($"saved at {dir}");
+                throw new Exception("Wrong directory!");
             }
+
+            if (IsCreateNewFolder)
+            {
+                Directory.CreateDirectory(Path.Combine(dir, @"\ImageFormatConvert"));
+            }
+
+            var formats = new ImageFormat[] { ImageFormat.Png, ImageFormat.Gif, ImageFormat.Jpeg, ImageFormat.Bmp, ImageFormat.Webp, ImageFormat.Icon };
+            var formatStr = ((TargetImageFormat)FormatIndex).ToString();
+            foreach (var file in GetItemsFromModel)
+            {
+                var fileName = Path.Combine(dir, Path.ChangeExtension(file, formatStr));
+                try
+                {
+                    using (var image = Image.FromFile(file))
+                    {
+                        image.Save(file, formats[FormatIndex]);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("ERROR:There is no Folder!\ndid you delete it while converting?");
+                }
+            }
+
+            MessageBox.Show($"saved at {dir}");
         }
         else
         {
@@ -187,19 +157,26 @@ public class ConverterViewModel
         }
     }
 
-    private void RemoveSelected() 
+    private void RemoveSelectedInList() 
     {
-        while(GetSelectedItems.Count > 0)
+        var items = GetItemsFromModel.Where(item => GetCurrentSelectedItems.Contains(item)).ToArray();
+        foreach(var item in items)
         {
-            model.ListItems.Remove(GetSelectedItems.First());
+            GetItemsFromModel.Remove(item);
         }
     }
     private bool IsImageFormat(string filePath)
     {
         try
         {
-            var image = Image.FromFile(filePath);
-            return true;
+            using (var image = Image.FromFile(filePath))
+            {
+                if(image != null)
+                {
+                    return true;
+                }
+                return false;
+            }
         }
         catch
         {
