@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using ImageFormatConverter.Model;
@@ -43,11 +44,22 @@ public partial class ConverterViewModel
     public void DropImage(DragEventArgs e)
     {
         var droptedItems = e.Data.GetData(DataFormats.FileDrop) as string[];
-        model.SaveDirection = "";
 
         if (droptedItems != null)
         {
-            ImageManager.GetImageDirectorys(model.ListItems, droptedItems);
+            var fileList = droptedItems.ToList();
+            for (int i = 0; i < fileList.Count; i++)
+            {
+                if (Directory.Exists(fileList[i]))
+                {
+                    var insideFiles = Directory.GetFiles(fileList[i]);
+                    fileList.RemoveAt(i--);
+                    fileList.AddRange(insideFiles);
+                }
+            }
+
+            var count = ImageManager.GetImageDirectorys(model.ListItems, fileList.ToArray());
+            MessageBox.Show($"{count} Files imported");
         }
     }
 }

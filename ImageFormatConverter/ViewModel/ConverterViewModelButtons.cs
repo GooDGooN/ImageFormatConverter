@@ -18,9 +18,10 @@ public partial class ConverterViewModel
     {
         var dialog = new OpenFolderDialog();
         dialog.Title = "Select import target folder";
-        if(dialog.ShowDialog() ?? true)
+        if(dialog.ShowDialog() ?? false)
         {
-            ImageManager.GetImageDirectorys(model.ListItems, dialog.FolderName);
+            var count = ImageManager.GetImageDirectorys(model.ListItems, dialog.FolderName);
+            MessageBox.Show($"{count} Files imported");
         }
     }
 
@@ -30,9 +31,10 @@ public partial class ConverterViewModel
         dialog.Title = "Select import target Image Files";
         dialog.Multiselect = true;
         dialog.Filter = "Image Files (*.png, *.gif, *.jpeg, *.bmp, *.webp, *.ico|*.png;*.gif;*.jpeg;*.bmp;*.webp;*.ico|All files (*.*)|*.*";
-        if(dialog.ShowDialog() ?? true)
+        if(dialog.ShowDialog() ?? false)
         {
-            ImageManager.GetImageDirectorys(model.ListItems, dialog.SafeFileNames);
+            var count = ImageManager.GetImageDirectorys(model.ListItems, dialog.FileNames);
+            MessageBox.Show($"{count} Files imported");
         }
     }
     private void ExportImages()

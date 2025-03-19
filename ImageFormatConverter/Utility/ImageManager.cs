@@ -19,8 +19,9 @@ public class ImageManager
         ImageFormat.Webp, 
         ImageFormat.Icon,
     ];
-    public static void GetImageDirectorys(Collection<string> targetCollection, params string[] names)
+    public static int GetImageDirectorys(Collection<string> targetCollection, params string[] names)
     {
+        var count = 0;
         if (Directory.Exists(names[0]))
         {
             var files = new DirectoryInfo(names[0]).GetFiles();
@@ -29,6 +30,7 @@ public class ImageManager
                 if (IsImageFormat(info.FullName))
                 {
                     targetCollection.Add(info.FullName);
+                    count++;
                 }
             }
         }
@@ -39,26 +41,29 @@ public class ImageManager
                 if (IsImageFormat(info))
                 {
                     targetCollection.Add(info);
+                    count++;
                 }
             }
         }
+        return count;
     }
 
     public static void ExportImages(Collection<string> files, string directory, TargetImageFormat format, bool createDirectory)
     {
         if (createDirectory)
         {
-            Directory.CreateDirectory(Path.Combine(directory, "ConvertedImage"));
+            var oldDir = directory;
+            directory = Path.Combine(directory, "ConvertedImage");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(Path.Combine(oldDir, "ConvertedImage"));
+            }
         }
         foreach (var file in files)
         {
             var formatStr = format.ToString();
-            var fileName = Path.ChangeExtension(file, formatStr);
-            var directoryInsertIndex = fileName.LastIndexOf(Path.DirectorySeparatorChar);
-            if (createDirectory)
-            {
-                fileName = fileName.Insert(directoryInsertIndex, Path.DirectorySeparatorChar + "ConvertedImage");
-            }
+            var fileName = Path.Combine(directory, Path.GetFileName(file));
+            fileName = Path.ChangeExtension(fileName, formatStr);
             try
             {
                 using (var image = Image.FromFile(file))
