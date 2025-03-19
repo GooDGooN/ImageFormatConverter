@@ -35,10 +35,12 @@ public static class ListboxSelectedItemsBehavior
         if (dpo is ListBox listbox)
         {
             listbox.SelectionChanged -= SelectItemChanged;
+
             if (e.NewValue is IList targetList)
             {
                 listbox.SelectionChanged += SelectItemChanged;
                 targetList.Clear();
+
                 foreach (var item in listbox.SelectedItems)
                 {
                     targetList.Add(item);
@@ -51,18 +53,21 @@ public static class ListboxSelectedItemsBehavior
     {
         if (sender is ListBox listbox)
         {
-            if(!isChanging)
+            if (!isChanging)
             {
                 var bindTargetList = GetSelectItems(listbox);
+
                 try
                 {
                     isChanging = true;
+
                     if (bindTargetList != null)
                     {
                         foreach (var item in e.RemovedItems)
                         {
                             bindTargetList.Remove(item);
                         }
+
                         foreach (var item in e.AddedItems)
                         {
                             bindTargetList.Add(item);

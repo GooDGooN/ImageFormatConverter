@@ -48,6 +48,7 @@ public partial class ConverterViewModel
         if (droptedItems != null)
         {
             var fileList = droptedItems.ToList();
+
             for (int i = 0; i < fileList.Count; i++)
             {
                 if (Directory.Exists(fileList[i]))

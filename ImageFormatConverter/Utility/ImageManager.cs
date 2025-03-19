@@ -22,9 +22,11 @@ public class ImageManager
     public static int GetImageDirectorys(Collection<string> targetCollection, params string[] names)
     {
         var count = 0;
+
         if (Directory.Exists(names[0]))
         {
             var files = new DirectoryInfo(names[0]).GetFiles();
+
             foreach (var info in files)
             {
                 if (IsImageFormat(info.FullName))
@@ -45,6 +47,7 @@ public class ImageManager
                 }
             }
         }
+
         return count;
     }
 
@@ -54,16 +57,19 @@ public class ImageManager
         {
             var oldDir = directory;
             directory = Path.Combine(directory, "ConvertedImage");
+
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(Path.Combine(oldDir, "ConvertedImage"));
             }
         }
+
         foreach (var file in files)
         {
             var formatStr = format.ToString();
             var fileName = Path.Combine(directory, Path.GetFileName(file));
             fileName = Path.ChangeExtension(fileName, formatStr);
+
             try
             {
                 using (var image = Image.FromFile(file))
@@ -91,6 +97,7 @@ public class ImageManager
                 {
                     return true;
                 }
+
                 return false;
             }
         }

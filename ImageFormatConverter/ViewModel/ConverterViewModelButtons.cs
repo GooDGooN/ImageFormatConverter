@@ -18,7 +18,8 @@ public partial class ConverterViewModel
     {
         var dialog = new OpenFolderDialog();
         dialog.Title = "Select import target folder";
-        if(dialog.ShowDialog() ?? false)
+
+        if (dialog.ShowDialog() ?? false)
         {
             var count = ImageManager.GetImageDirectorys(model.ListItems, dialog.FolderName);
             MessageBox.Show($"{count} Files imported");
@@ -31,7 +32,8 @@ public partial class ConverterViewModel
         dialog.Title = "Select import target Image Files";
         dialog.Multiselect = true;
         dialog.Filter = "Image Files (*.png, *.gif, *.jpeg, *.bmp, *.webp, *.ico|*.png;*.gif;*.jpeg;*.bmp;*.webp;*.ico|All files (*.*)|*.*";
-        if(dialog.ShowDialog() ?? false)
+
+        if (dialog.ShowDialog() ?? false)
         {
             var count = ImageManager.GetImageDirectorys(model.ListItems, dialog.FileNames);
             MessageBox.Show($"{count} Files imported");
@@ -43,12 +45,14 @@ public partial class ConverterViewModel
         {
             var dialog = new OpenFolderDialog();
             dialog.Title = "Select export location";
+
             if (!dialog.ShowDialog() ?? false)
             {
                 return;
             }
 
             var dir = dialog.FolderName;
+
             if (!Directory.Exists(dir))
             {
                 MessageBox.Show("Worng Action!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -66,6 +70,7 @@ public partial class ConverterViewModel
     private void RemoveSelected()
     {
         var items = GetItemsFromModel.Where(item => GetCurrentSelectedItems.Contains(item)).ToArray();
+
         foreach (var item in items)
         {
             GetItemsFromModel.Remove(item);
